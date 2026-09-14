@@ -1,0 +1,18 @@
+.chart-card {
+  padding: var(--sp-5);
+}
+
+.chart-card-header {
+  margin-bottom: var(--sp-3);
+}
+
+.chart-card-header h3 {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.chart-card-header p {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}

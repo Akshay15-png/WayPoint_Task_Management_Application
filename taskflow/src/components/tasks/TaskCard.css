@@ -1,0 +1,142 @@
+.task-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  transition: border-color var(--ease) 0.15s, transform var(--ease) 0.15s;
+}
+
+.task-card:hover {
+  border-color: var(--border-strong);
+}
+
+.task-card.is-done {
+  opacity: 0.6;
+}
+
+.task-card-top {
+  display: flex;
+  gap: var(--sp-3);
+}
+
+.task-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-strong);
+  background: transparent;
+  color: #14140f;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--ease) 0.15s, border-color var(--ease) 0.15s;
+}
+
+.task-check:hover {
+  border-color: var(--teal);
+}
+
+.task-check.is-checked {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.task-card-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.task-title {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.is-done .task-title {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+.task-description {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.task-priority {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.priority-low {
+  background: var(--bg-surface-raised);
+  color: var(--text-tertiary);
+}
+
+.priority-medium {
+  background: var(--blue-soft);
+  color: var(--blue);
+}
+
+.priority-high {
+  background: var(--red-soft);
+  color: var(--red);
+}
+
+.task-due {
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+}
+
+.task-due.is-overdue {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.task-card-actions {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.task-action {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  transition: background var(--ease) 0.15s, color var(--ease) 0.15s;
+}
+
+.task-action:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.task-action-danger:hover {
+  color: var(--red);
+  background: var(--red-soft);
+}

@@ -1,0 +1,57 @@
+.task-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.task-column-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+.task-column-header h2 {
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+
+.task-column-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot-todo {
+  background: var(--text-tertiary);
+}
+.dot-progress {
+  background: var(--blue);
+}
+.dot-done {
+  background: var(--teal);
+}
+
+.task-column-count {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  color: var(--text-tertiary);
+  background: var(--bg-surface-raised);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.task-column-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.task-column-empty {
+  font-size: var(--fs-sm);
+  color: var(--text-tertiary);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+}

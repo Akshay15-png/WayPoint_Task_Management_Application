@@ -1,0 +1,22 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--sp-6) var(--sp-7);
+}
+
+@media (max-width: 860px) {
+  .app-content {
+    padding: var(--sp-4) var(--sp-4) 88px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-content {
+    padding: var(--sp-3) var(--sp-3) 88px;
+  }
+}
