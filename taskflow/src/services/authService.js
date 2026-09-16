@@ -1,6 +1,5 @@
 import { apiClient } from './api';
 
-
 // Register a new user
 export async function register({ name, email, password }) {
   const data = await apiClient(
@@ -26,7 +25,6 @@ export async function register({ name, email, password }) {
   return { user };
 }
 
-
 // Login
 export async function login({ email, password }) {
   const data = await apiClient(
@@ -40,21 +38,24 @@ export async function login({ email, password }) {
     }
   );
 
-  const user = {
-    id: data.user_id,
-    name: data.username,
-    email: data.email,
+  localStorage.setItem("access_token", data.access_token);
+
+  return {
+    user: data.user,
+    token: data.access_token,
   };
-
-  storeUser(user);
-
-  return { user };
 }
 
 
 // Logout
-export async function logout() {
-  storeUser(null);
+export function logout() {
+  localStorage.removeItem("access_token");
+}
+
+
+// Check whether a JWT exists
+export function isAuthenticated() {
+  return !!localStorage.getItem("access_token");
 }
 
 

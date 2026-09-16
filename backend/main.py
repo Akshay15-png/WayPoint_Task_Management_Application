@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from database import SessionLocal, engine, Base
 from models import User as UserModel
+from auth import create_access_token
 
 import bcrypt
 
@@ -108,12 +109,18 @@ def user_login(user: loginUser, db: Session = Depends(get_db)):
                 detail="Invalid email or password"
             )
 
-        # return {
-        #     "message": "Login successful",
-        #     "user_id": existing_user.id,
-        #     "username": existing_user.username,
-        #     "email": existing_user.email
-        # }
+        access_token = create_access_token(existing_user.id)
+
+        return {
+            "message": "Login successful",
+            "access_token": access_token,
+            "token_type": "bearer",
+            "user": {
+                "id": existing_user.id,
+                "username": existing_user.username,
+                "email": existing_user.email
+            }
+        }
 
     except HTTPException:
         raise
