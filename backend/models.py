@@ -1,6 +1,5 @@
-from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
+from datetime import datetime, date
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey, Date
 from database import Base
 
 
@@ -20,8 +19,9 @@ class Task(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False)
     description = Column(Text)
-    completed = Column(Boolean, default=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow)
-
+    completed = Column(Boolean, default=False, nullable=False)
+    due_date = Column(Date, nullable=True)
+    priority = Column(String(20), nullable=False, default="medium")
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)

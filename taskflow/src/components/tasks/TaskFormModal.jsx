@@ -34,7 +34,7 @@ export default function TaskFormModal({ initialTask, onClose, onSubmit }) {
       await onSubmit({
         ...form,
         title: form.title.trim(),
-        dueDate: form.dueDate ? new Date(form.dueDate).toISOString() : null,
+        dueDate: form.dueDate||null,
       });
       onClose();
     } catch (err) {

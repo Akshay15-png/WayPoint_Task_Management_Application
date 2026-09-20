@@ -3,9 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from datetime import datetime, date
 from database import SessionLocal, engine, Base
 from models import User as UserModel
-from auth import create_access_token
+from models import Task as TaskModel
+from auth import create_access_token, get_current_user_id
 
 import bcrypt
 
@@ -33,6 +35,12 @@ class loginUser(BaseModel):
     email: str
     passwd: str
 
+class createTasks(BaseModel):
+    title:str
+    description:str
+    priority:str="medium"
+    dueDate:date|None=None
+    # completed:bool
 
 def get_db():
     db = SessionLocal()
@@ -129,4 +137,42 @@ def user_login(user: loginUser, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=500,
             detail=f"Login failed: {str(e)}"
+        )
+
+# Task
+@app.post("/tasks")
+def post_task(
+    task: createTasks,
+    user_id: int = Depends(get_current_user_id), 
+    db: Session = Depends(get_db)):
+    try:
+
+        new_task = TaskModel(
+            title=task.title,
+            description=task.description,
+            priority=task.priority,
+            due_date=task.dueDate,
+            user_id=user_id
+            
+        )
+
+        db.add(new_task)
+        db.commit()
+        db.refresh(new_task)
+
+        return {
+            "message": "New task created successfully",
+            "user_id": new_task.user_id,
+            # "username": new_user.username,
+            "task": new_task.title,
+            "priority": new_task.priority,
+            "dueDate": new_task.due_date
+        }
+
+    except Exception as e:
+        db.rollback()
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Task creation failed: {str(e)}"
         )
