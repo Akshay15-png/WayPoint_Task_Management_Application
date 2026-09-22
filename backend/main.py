@@ -40,7 +40,14 @@ class createTasks(BaseModel):
     description:str
     priority:str="medium"
     dueDate:date|None=None
-    # completed:bool
+    status: str = "todo"
+
+class updateTasks(BaseModel): 
+    title: str | None = None 
+    description: str | None = None 
+    priority: str | None = None 
+    dueDate: date | None = None 
+    status: str | None = None
 
 def get_db():
     db = SessionLocal()
@@ -139,7 +146,41 @@ def user_login(user: loginUser, db: Session = Depends(get_db)):
             detail=f"Login failed: {str(e)}"
         )
 
-# Task
+# Get Task
+@app.get("/tasks")
+def get_tasks(
+    user_id: int = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+):
+    try:
+        tasks = (
+            db.query(TaskModel)
+            .filter(TaskModel.user_id == user_id)
+            .all()
+        )
+
+        return [
+            {
+                "id": task.id,
+                "title": task.title,
+                "description": task.description,
+                "status": task.status,
+                "priority": task.priority,
+                "dueDate": task.due_date,
+                "createdAt": task.created_at,
+                "updatedAt": task.updated_at,
+                "userId": task.user_id
+            }
+            for task in tasks
+        ]
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to fetch tasks: {str(e)}"
+        )
+
+# Post Task
 @app.post("/tasks")
 def post_task(
     task: createTasks,
@@ -176,3 +217,115 @@ def post_task(
             status_code=500,
             detail=f"Task creation failed: {str(e)}"
         )
+
+# Patch Task
+@app.patch("/tasks/{task_id}")
+def update_task(
+    task_id: int,
+    task: updateTasks,
+    user_id: int = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+):
+    try:
+        existing_task = (
+            db.query(TaskModel)
+            .filter(
+                TaskModel.id == task_id,
+                TaskModel.user_id == user_id
+            )
+            .first()
+        )
+
+        if not existing_task:
+            raise HTTPException(
+                status_code=404,
+                detail="Task not found"
+            )
+
+        if task.title is not None:
+            existing_task.title = task.title
+
+        if task.description is not None:
+            existing_task.description = task.description
+
+        if task.priority is not None:
+            existing_task.priority = task.priority
+
+        if task.dueDate is not None:
+            existing_task.due_date = task.dueDate
+
+        if task.status is not None:
+            existing_task.status = task.status
+            existing_task.completed = task.status == "done"
+
+        db.commit()
+        db.refresh(existing_task)
+
+        return {
+            "message": "Task updated successfully",
+            "task": {
+                "id": existing_task.id,
+                "title": existing_task.title,
+                "description": existing_task.description,
+                "status": existing_task.status,
+                # "completed": existing_task.completed,
+                "priority": existing_task.priority,
+                "dueDate": existing_task.due_date,
+                "createdAt": existing_task.created_at,
+                "updatedAt": existing_task.updated_at,
+                "userId": existing_task.user_id
+            }
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Task update failed: {str(e)}"
+        )
+
+# Delete Task
+@app.delete("/tasks/{task_id}")
+def delete_task(
+    task_id: int,
+    user_id: int = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+    ):
+    try:
+        existing_task = (
+            db.query(TaskModel)
+            .filter(
+                TaskModel.id == task_id,
+                TaskModel.user_id == user_id
+            )
+            .first()
+        )
+
+        if not existing_task:
+            raise HTTPException(
+                status_code=404,
+                detail="Task not found"
+            )
+
+        db.delete(existing_task)
+        db.commit()
+
+        return {
+            "message": "Task Deleted successfully",
+            "task": {
+                "id": task_id,
+            }
+        }
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Task update failed: {str(e)}"
+        )   
