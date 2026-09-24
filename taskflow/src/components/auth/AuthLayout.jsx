@@ -11,6 +11,7 @@ export default function AuthLayout({ eyebrow, title, subtitle, children }) {
             Waypoint is a quiet place to track what needs doing — one list,
             one streak, one clear picture of your week.
           </p>
+          <p id='watermark'>Developed by kaali</p>
         </div>
       </div>
 

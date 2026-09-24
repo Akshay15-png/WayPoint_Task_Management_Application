@@ -35,7 +35,7 @@ export default function Register() {
     setIsSubmitting(true);
     try {
       await register({ name: form.name.trim(), email: form.email.trim(), password: form.password });
-      navigate('/dashboard', { replace: true });
+      navigate('/login', { replace: true });
     } catch (err) {
       setError(err.message || 'Could not create your account. Try again.');
     } finally {

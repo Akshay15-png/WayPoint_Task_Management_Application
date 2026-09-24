@@ -26,26 +26,23 @@ export function TaskProvider({ children }) {
   }, [loadTasks]);
 
   async function addTask(input) {
-    const task = await taskService.createTask(input);
-    setTasks((prev) => [task, ...prev]);
-    return task;
+    await taskService.createTask(input);
+    await loadTasks();
   }
 
   async function editTask(id, changes) {
-    const updated = await taskService.updateTask(id, changes);
-    setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
-    return updated;
+    await taskService.updateTask(id, changes);
+    await loadTasks();
   }
 
   async function changeStatus(id, status) {
-    const updated = await taskService.setTaskStatus(id, status);
-    setTasks((prev) => prev.map((t) => (t.id === id ? updated : t)));
-    return updated;
+    await taskService.setTaskStatus(id, status);
+    await loadTasks();
   }
 
   async function removeTask(id) {
     await taskService.deleteTask(id);
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+    await loadTasks();
   }
 
   const value = {
@@ -67,3 +64,4 @@ export function useTasks() {
   if (!ctx) throw new Error('useTasks must be used within a TaskProvider');
   return ctx;
 }
+

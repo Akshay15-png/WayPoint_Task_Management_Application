@@ -9,6 +9,8 @@ import './Dashboard.css';
 const FILTERS = [
   { id: 'all', label: 'All' },
   { id: 'high', label: 'High priority' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'low', label: 'Low' },
 ];
 
 export default function Dashboard() {
@@ -17,9 +19,21 @@ export default function Dashboard() {
   const [filter, setFilter] = useState('all');
 
   const filteredTasks = useMemo(() => {
-    if (filter === 'high') return tasks.filter((t) => t.priority === 'high');
+    if (filter === 'high') {
+      return tasks.filter((t) => t.priority === 'high');
+    }
+
+    if (filter === 'medium') {
+      return tasks.filter((t) => t.priority === 'medium');
+    }
+
+    if (filter === 'low') {
+      return tasks.filter((t) => t.priority === 'low');
+    }
+
     return tasks;
   }, [tasks, filter]);
+
 
   const columns = useMemo(
     () => ({
@@ -120,6 +134,7 @@ export default function Dashboard() {
             onStatusChange={handleStatusChange}
             emptyHint="Completed tasks will show up here."
           />
+        <p id='watermark2'>Developed by kaali</p>
         </div>
       )}
 

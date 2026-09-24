@@ -14,23 +14,18 @@
  */
 
 // Point this at your FastAPI server, e.g. http://localhost:8000/api
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+export const API_BASE_URL = "http://localhost:8000";
 
 // Toggle this off (or drive it from an env var) once the FastAPI backend
 // and endpoints below actually exist.
-export const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
+export const USE_MOCK = false;
 
+// storing jwt in localstorage
 function getToken() {
-  return localStorage.getItem('waypoint_token');
+  return localStorage.getItem('access_token');
 }
 
-export function setToken(token) {
-  if (token) {
-    localStorage.setItem('waypoint_token', token);
-  } else {
-    localStorage.removeItem('waypoint_token');
-  }
-}
+
 
 class ApiError extends Error {
   constructor(message, status, payload) {
@@ -41,19 +36,12 @@ class ApiError extends Error {
   }
 }
 
-/**
- * Thin wrapper around fetch that:
- *  - prefixes API_BASE_URL
- *  - attaches the bearer token if present
- *  - parses JSON and throws ApiError on non-2xx responses
- *
- * Expected FastAPI conventions this assumes:
- *  - JSON request/response bodies
- *  - errors returned as { detail: "message" } (FastAPI's default shape)
- *  - auth via `Authorization: Bearer <token>`
- */
+// API Central Gateway
 export async function apiClient(path, { method = 'GET', body, headers = {} } = {}) {
   const token = getToken();
+
+  // console.log("API REQUEST:", path);
+  // console.log("TOKEN:", token);
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method,
