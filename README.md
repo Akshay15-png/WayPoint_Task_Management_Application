@@ -1,4 +1,18 @@
 # Running project locally
+Packages & Services Required:
+```bash
+npm
+uv
+postgresql
+python3
+```
+
+
+
+Run these services to start the application
+
+
+
 
 ### For frontend
 ```bash
