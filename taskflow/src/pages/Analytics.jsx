@@ -71,6 +71,7 @@ export default function Analytics() {
               data={summary.monthly}
               color="var(--blue)"
             />
+            <p id='watermark3'>Developed by kaali</p>
           </div>
         </>
       )}

@@ -134,6 +134,7 @@ export default function Dashboard() {
             onStatusChange={handleStatusChange}
             emptyHint="Completed tasks will show up here."
           />
+        <p id='watermark2'>Developed by kaali</p>
         </div>
       )}
 

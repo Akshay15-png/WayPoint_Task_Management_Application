@@ -30,6 +30,17 @@
   }
 }
 
+#watermark3 {
+  position: fixed;
+  bottom: 12px;
+  left: 49%;
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.35;
+  letter-spacing: 0.8px;
+  z-index: 1000;
+}
+
 @media (max-width: 560px) {
   .stat-grid {
     grid-template-columns: repeat(2, 1fr);

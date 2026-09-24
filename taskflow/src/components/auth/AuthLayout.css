@@ -110,6 +110,17 @@
   text-decoration: underline;
 }
 
+#watermark {
+  position: fixed;
+  bottom: 12px;
+  left: 16px;
+  margin: 0;
+  font-size: 11px;
+  opacity: 0.35;
+  letter-spacing: 0.8px;
+  z-index: 1000;
+}
+
 @media (max-width: 860px) {
   .auth-screen {
     grid-template-columns: 1fr;
