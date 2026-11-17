@@ -1,83 +1,163 @@
-# Waypoint — Task Management Frontend
+# WayPoint — Task Management Frontend
 
-A frontend-only React app (Vite + React Router) for tracking tasks and
-streaks. No backend, database, or auth server is included — this is built
-so a Python/FastAPI backend can be dropped in later with minimal changes.
+WayPoint is a React-based frontend for a full-stack task management application. It provides an interface for user authentication, task management, dashboards, and analytics.
 
-## Running locally
+The frontend is built using **React, Vite, and React Router**, and communicates with a Python/FastAPI backend for authentication and data management.
 
-```bash
-npm install
-npm run dev
-```
+## Tech Stack
 
-Then open the printed local URL (usually `http://localhost:5173`).
+- React
+- Vite
+- React Router
+- JavaScript
+- CSS
+- Docker
+- Nginx
 
-There's nothing to configure to try it out: authentication and task data
-are mocked in `localStorage` so you can register, log in, create tasks,
-and see analytics update immediately.
+## Features
 
-## Project structure
+- User registration and login.
+- Dashboard for managing tasks.
+- Create, update, and delete tasks.
+- Task status and priority management.
+- Analytics dashboard.
+- API integration with FastAPI backend.
+- JWT-based authentication support.
 
-```
+## Project Structure
+
+```text
 src/
 ├── components/
 │   ├── auth/        # AuthLayout — shared shell for Login/Register
-│   ├── layout/       # Sidebar, AppLayout — shared shell for app pages
-│   ├── tasks/        # TaskCard, TaskColumn, TaskFormModal
-│   ├── charts/       # StatCard, BarChartCard, LineChartCard
-│   └── common/       # ProtectedRoute
+│   ├── layout/      # Sidebar, AppLayout — shared shell for app pages
+│   ├── tasks/       # TaskCard, TaskColumn, TaskFormModal
+│   ├── charts/      # StatCard, BarChartCard, LineChartCard
+│   └── common/      # ProtectedRoute
+│
 ├── pages/
 │   ├── Login.jsx
 │   ├── Register.jsx
 │   ├── Dashboard.jsx
 │   └── Analytics.jsx
+│
 ├── context/
-│   ├── AuthContext.jsx   # current user + login/register/logout
-│   └── TaskContext.jsx   # task list + create/update/delete/status
+│   ├── AuthContext.jsx
+│   └── TaskContext.jsx
+│
 ├── services/
-│   ├── api.js               # shared fetch wrapper (base URL, auth header, errors)
-│   ├── authService.js       # login/register/logout
-│   ├── taskService.js       # task CRUD
-│   └── analyticsService.js  # streaks + chart data
+│   ├── api.js
+│   ├── authService.js
+│   ├── taskService.js
+│   └── analyticsService.js
+│
 ├── utils/
-│   ├── mockData.js   # seed data + shared enums (STATUS, PRIORITY_LABELS)
+│   ├── mockData.js
 │   └── dateUtils.js
+│
 ├── styles/
-│   ├── variables.css # design tokens: color, type, spacing
-│   └── global.css    # resets + shared .btn/.field/.card classes
+│   ├── variables.css
+│   └── global.css
+│
 ├── App.jsx
 └── main.jsx
 ```
 
-## Connecting the FastAPI backend later
+## Running Locally
 
-All data access goes through `src/services/*`, never straight from a
-component. Each service function currently has two branches guarded by
-`USE_MOCK` (see `src/services/api.js`):
+### Prerequisites
 
-```js
-export async function fetchTasks() {
-  if (USE_MOCK) {
-    // reads from localStorage
-  }
-  return apiClient('/tasks'); // <- already written and ready
-}
+- Node.js
+- npm
+
+Install dependencies:
+
+```bash
+npm install
 ```
 
-To connect a real backend:
+Start the development server:
 
-1. Set `VITE_API_BASE_URL` in a `.env` file to your FastAPI server, e.g.
-   `VITE_API_BASE_URL=http://localhost:8000/api` (see `.env.example`).
-2. Set `VITE_USE_MOCK=false`.
-3. Make sure your FastAPI endpoints match what `src/services/*.js`
-   already expects:
-   - `POST /auth/login`, `POST /auth/register`, `POST /auth/logout`
-   - `GET /tasks`, `POST /tasks`, `PATCH /tasks/:id`, `DELETE /tasks/:id`
-   - `GET /analytics/summary`
-4. `apiClient` in `src/services/api.js` already attaches a bearer token
-   from `localStorage` and unwraps FastAPI's default `{ detail }` error
-   shape — adjust there if your backend differs.
+```bash
+npm run dev
+```
 
-No component code needs to change for this swap; components only ever
-call functions from `services/` and read from `AuthContext`/`TaskContext`.
+Open the local URL printed in your terminal, usually:
+
+```text
+http://localhost:5173
+```
+
+## Backend Integration
+
+The frontend communicates with the FastAPI backend through the service layer in `src/services/`.
+
+All API requests are managed through a shared API client.
+
+### API Configuration
+
+Configure the following environment variables in your `.env` file:
+
+```env
+VITE_API_BASE_URL=http://localhost:8000/api
+VITE_USE_MOCK=false
+```
+
+The frontend supports the following backend operations:
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/auth/login` | User login |
+| POST | `/auth/register` | User registration |
+| POST | `/auth/logout` | User logout |
+| GET | `/tasks` | Fetch tasks |
+| POST | `/tasks` | Create a task |
+| PATCH | `/tasks/:id` | Update a task |
+| DELETE | `/tasks/:id` | Delete a task |
+| GET | `/analytics/summary` | Fetch analytics |
+
+The API client also handles bearer-token authentication and API error responses.
+
+## Docker
+
+The frontend is containerized using Docker and served through Nginx.
+
+### Build Docker Image
+
+```bash
+docker build -t waypoint:v1 .
+```
+
+### Run Docker Container
+
+```bash
+docker run -d -p 80:80 --name frontend waypoint:v1
+```
+
+Access the frontend:
+
+```text
+http://localhost
+```
+
+### Docker Hub
+
+The frontend Docker image will be published to Docker Hub.
+
+```bash
+docker pull YOUR_DOCKERHUB_USERNAME/waypoint-frontend:v1
+```
+
+Replace `YOUR_DOCKERHUB_USERNAME` with your Docker Hub username.
+
+## Future Improvements
+
+- Cloud deployment.
+- Production API configuration.
+- Improved frontend error handling.
+- Performance optimization.
+- Automated frontend deployment.
+
+---
+
+**WayPoint Frontend — React-powered interface for task management.**
