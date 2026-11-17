@@ -81,11 +81,3 @@ To connect a real backend:
 
 No component code needs to change for this swap; components only ever
 call functions from `services/` and read from `AuthContext`/`TaskContext`.
-
-## Notes
-
-- Logout is currently frontend-only (clears local session state) as
-  requested — wire it to a real `/auth/logout` call the same way as the
-  rest of `authService.js` once the backend exists.
-- Charts use [Recharts](https://recharts.org/), already listed in
-  `package.json`.
