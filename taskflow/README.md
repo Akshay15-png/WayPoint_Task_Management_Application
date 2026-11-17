@@ -145,10 +145,8 @@ http://localhost
 The frontend Docker image will be published to Docker Hub.
 
 ```bash
-docker pull YOUR_DOCKERHUB_USERNAME/waypoint-frontend:v1
+docker pull kaali01/waypoint-frontend:v1
 ```
-
-Replace `YOUR_DOCKERHUB_USERNAME` with your Docker Hub username.
 
 ## Future Improvements
 
